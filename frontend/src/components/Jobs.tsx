@@ -1,31 +1,33 @@
-import useGetJobs from '@/hooks/useGetJobs'
+import { jobsResponse } from '@/hooks/useGetJobs'
 import { Button } from './ui/button';
 import JobCardSkeleton from './ui/JobCardSkeleton';
-import { useRecoilValue } from 'recoil';
-import { joblocationAtom, jobRoleAtom } from '@/state/queryAtoms';
+import { useRecoilValueLoadable } from 'recoil';
+import { AllJobsAtom } from '@/state/Alljobs';
+import { useNavigate } from 'react-router-dom';
+import { Avatar, AvatarFallback } from './ui/avatar';
 
 
 const Jobs = () => {
-  const joblocation = useRecoilValue(joblocationAtom);
-  const role = useRecoilValue(jobRoleAtom);
-  const {allJobs,isLoading} = useGetJobs(role,joblocation);
+  // const {allJobs,isLoading} = useGetJobs(role,joblocation);
+  const allJobs = useRecoilValueLoadable(AllJobsAtom);
   return (
     <div className='p-2 w-[70%] border'>
         <div className='flex justify-between items-center pb-2 px-6'>
-            <p className='text-3xl'>{allJobs?.length} Jobs</p>
+            <p className='text-3xl'>{allJobs.contents.length} Jobs</p>
             <Button className='rounded-[22px]'>Sort by</Button>
         </div><hr />
         <div className='flex flex-col px-14 gap-3 mt-8'>
-              {isLoading ? (<>
-                {[1,2,3,4].map((i)=>(
+             {allJobs.state=="loading"?(
+                [1,2,3,4,5].map((i)=>(
                   <JobCardSkeleton key={i}/>
-                ))}
-              </>):
-              (<>
-                {allJobs?.map((job)=>(
-                <JobCard key={job._id} company={job.company} companyLocation={job.companyLocation??"India"} role={job.role} desc={job.description} salary={job.salary ?? ""}location={job.location}/>
-              ))}
-              </>)}
+                ))
+             ):(
+              <>
+              {allJobs.contents.map((job:jobsResponse)=>(
+              <JobCard _id={job._id} key={job._id} company={job.company} companyLocation={job.companyLocation??"India"} role={job.role} desc={job.description} salary={job.salary ?? ""} location={job.location}/>
+            ))}
+            </>
+             )}
         </div>
     </div>
   )
@@ -33,21 +35,28 @@ const Jobs = () => {
 
 export default Jobs
 
-const JobCard = ({company,location,role,salary,desc,companyLocation}:{
+const JobCard = ({company,location,role,salary,desc,companyLocation,_id}:{
   company:string
   location:string,
   role:string,
   salary:string,
   desc:string,
-  companyLocation:string
+  companyLocation:string,
+  _id:string
 })=>{
+  const navigate = useNavigate();
+  const companyFullName = company.split(" ");
+  const CompanyAvatar = `${companyFullName[0]?.charAt(0)} ${companyFullName[1]?.charAt(0)}`;
+  console.log(CompanyAvatar);
   return(
     <>
-      <div className='w-full bg-slate-900 rounded-[13px] p-2  flex gap-2 py-7'>
+      <div className='w-full bg-slate-900 rounded-[13px] p-2  flex gap-2 py-7 cursor-pointer' onClick={()=>{
+          navigate(`/home/job/${_id}`)
+      }}>
                   <div className='w-[25%] flex justify-center items-start'>
-                        <div className='w-24 h-16 rounded-xl bg-slate-800 flex justify-center items-center'>
-                                  FUCK
-                        </div>  
+                        <Avatar className='size-28'>
+                            <AvatarFallback>{CompanyAvatar}</AvatarFallback>
+                        </Avatar>  
                   </div>
                   <div className='flex flex-col w-[75%] p-1 gap-1'>
                       <p className='text-gray-500'>{company}</p>

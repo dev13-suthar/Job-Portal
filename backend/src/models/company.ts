@@ -24,7 +24,7 @@ const CompanySchema = new mongoose.Schema({
         required: false,
         default: []
     }
-});
+},{timestamps:true});
 
 const Company = mongoose.model('Company',CompanySchema);
 export default Company

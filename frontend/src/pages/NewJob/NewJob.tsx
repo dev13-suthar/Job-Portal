@@ -12,7 +12,8 @@ export type postJobTypes = {
   location:string,
   title:string,
   description:string,
-  salary:string
+  salary:string,
+  companyLocation:string
 }
 
 
@@ -38,7 +39,8 @@ const NewJob = () => {
                 role:"",
                 location:"",
                 title:"",
-                description:""
+                description:"",
+                companyLocation:""
                }}
                onSubmit={handleFormsubmit}
                >
@@ -88,6 +90,12 @@ const NewJob = () => {
                   value={values.salary}
                   onChange={handleChange}
                   />{errors.salary && touched.salary && errors.salary}
+                  <Input
+                  placeholder="Where's comapny located ?India,Usa,Delhi,SA etc"
+                  name="companyLocation"
+                  value={values.companyLocation}
+                  onChange={handleChange}
+                  />{errors.companyLocation && touched.companyLocation && errors.companyLocation}
                   <select
                   value={values.location}
                   name="location"

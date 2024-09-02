@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 
 const jobSchema = new mongoose.Schema({
@@ -37,11 +37,12 @@ const jobSchema = new mongoose.Schema({
         required:false
     },
     submissions:{
-        type:[],
+        type:[{type:Schema.Types.ObjectId,ref:"User"}],
         required:false,
-        default:[]
-    }
-});
+        default:[],
+    },
+    createdAt: { type: Date, default: Date.now } 
+},{timestamps:true});
 
 const Jobs = mongoose.model('Job',jobSchema);
 export default Jobs;

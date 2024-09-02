@@ -1,7 +1,7 @@
 import { BACKEND_URL } from '@/constants';
 import { useEffect, useState } from 'react'
 
-type jobsResponse = {
+export type jobsResponse = {
     _id: string,
     title: string,
     description: string,

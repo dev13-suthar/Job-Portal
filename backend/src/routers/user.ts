@@ -196,26 +196,72 @@ router.post("/newJob",authMiddleware,empMiddleware,async(req,res)=>{
     }
 })
 
+// Apply to JOb
+router.post("/apply",authMiddleware,async(req,res)=>{
+    try{
+        const userId = req.userId;
+        const jobId = req.query.jobId;
+        const jobs = await Jobs.findById(jobId);
+        const checkDupEntry = jobs?.submissions?.find(x=>x.toString()===userId);
+        if(checkDupEntry){
+            throw new Error("Already Applied")
+        }
+        const ApplytoJob = await Jobs.findByIdAndUpdate(jobId,{
+            $push:{
+                'submissions':userId
+            }
+        },{new:true});
+        const addjobTOUserDb = await User.findByIdAndUpdate(userId,{
+            $push:{
+                'applications':jobId
+            }
+        },{new:true});
+        res.status(201).json({
+            message:"Applied to Jobs DOne",
+            ApplytoJob,
+            addjobTOUserDb
+        })
+    } catch (error:any) {
+        res.status(400).json({
+            error:error.message
+        })
+    }
+})
 
+// Get the user job he applied to
+router.get("/myapplications",authMiddleware,async(req,res)=>{
+    const userId = req.userId;
+    const user = await User.findById(userId).populate('applications').exec();
+
+    if (!user) {
+        console.log('User not found');
+        return res.status(404).json({
+            message:"Cannot find USER"
+        })
+      }
+  
+      // Step 2: Get the list of jobs the user has applied to
+      const jobs = user.applications;
+  
+      // Step 3: Return or log the job information
+      res.json({jobs})
+    // const userJosnn=  await Jobs.aggregate([
+    //     { $match: {submissions:userId} }
+    // ]);
+    // res.status(200).json({userJosnn})
+})
+
+// Gets user all information
+router.get("/me",authMiddleware,async(req,res)=>{
+    const userId = req.userId;
+    const user = await User.findById(userId).select("-password,-jobs");
+    res.json({user});
+})
+
+// byd ID
+router.get("/user/:id",authMiddleware,async(req,res)=>{
+    const {id} = req.params;
+    const user = await User.findById(id).select("-password,-jobs");
+    res.json({user});
+})
 export default router;
-
-//const newJob = new Jobs({
-    //         title:parsedData.data?.title,
-    //         description:parsedData.data?.description,
-    //         role:parsedData.data?.role,
-    //         location:parsedData.data?.location,
-    //         company:searchCompany?.name,
-    //         createdBy:userId,
-    //     });
-    //     await newJob.save();
-    //     const updateCompany = await Company.findByIdAndUpdate(searchCompany?._id,{
-    //         $push:{
-    //             'jobs':newJob
-    //         },
-    //     },
-    //     {new:true}
-    // )
-    //     await updateCompany?.save();
-    //     res.status(201).json({
-    //         newJob
-    //     })

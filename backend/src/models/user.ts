@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 const profileSchema = new mongoose.Schema({
     profileSummary: {
         type: String,
@@ -47,9 +48,9 @@ const userSchema = new mongoose.Schema({
         required: false
     },
     applications: {
-        type: [String],  // Define the type of elements in the array
+        type: [{type:mongoose.Schema.Types.ObjectId,ref:"Job"}],  // Define the type of elements in the array
         required: false,
-        default: []
+        default: [],
     },
     jobs: {
         type: [{type:mongoose.Schema.Types.ObjectId,ref:'Job'}], // Adjust the type depending on what you store (e.g., job IDs or job titles)
@@ -69,7 +70,7 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     }
-});
+},{timestamps:true});
 
 userSchema.pre('save', function(next) {
     if (this.role !== 'Employee') {
@@ -80,6 +81,8 @@ userSchema.pre('save', function(next) {
     }
     next();
 });
+
+
 
 const User = mongoose.model('User', userSchema);
 export default User;

@@ -12,6 +12,6 @@ export const createJobSchema = z.object({
     companyName:z.string(),
     role:z.string(),
     salary:z.string(),
-    location:z.enum(["Remote","On-site","Hybrid"]),
+    location:z.enum(["Remote" , "On-site" , "Hybrid"]),
     companyLocation:z.string(),
 })

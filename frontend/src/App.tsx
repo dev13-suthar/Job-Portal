@@ -9,6 +9,10 @@ import Layout from './pages/layout'
 import Feed from './pages/feed/Feed'
 import NewJob from './pages/NewJob/NewJob'
 import { Toaster } from 'sonner'
+import SingleJob from './pages/job.id/SingleJob'
+import MyApplications from './pages/MyApplications/MyApplications'
+import MyProfile from './pages/profilePage/MyProfile'
+import MyJobInfo from './pages/MyjobsInfo/MyJobInfo'
 
 function App() {
 
@@ -28,6 +32,11 @@ function App() {
               <Route path='setProfile' element={<Setprofile/>}/>
               <Route path='feed' element={<Feed/>}/>
               <Route path='newJob' element={<NewJob/>}/>
+              <Route path='job/:id' element={<SingleJob/>}/>
+              <Route path='myApplication' element={<MyApplications/>}/>
+              <Route path='me' element={<MyProfile isMe={true}/>}/>
+              <Route path='user/:id' element={<MyProfile isMe={false}/>}/>
+              <Route path='myJobinfo/:id' element={<MyJobInfo/>}/>
             </Route>
           </Routes>
         </RecoilRoot>

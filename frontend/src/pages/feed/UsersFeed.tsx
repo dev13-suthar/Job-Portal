@@ -2,12 +2,30 @@ import JobDisplay from "@/components/JobDisplay"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Spotlight } from "@/components/ui/Spotlight"
+import { BACKEND_URL } from "@/constants"
+import { AllJobsAtom } from "@/state/Alljobs"
 import { joblocationAtom, jobRoleAtom } from "@/state/queryAtoms"
-import { useRecoilState } from "recoil"
+import { useRecoilState, useSetRecoilState } from "recoil"
 
 const UsersFeed = () => {
   const [joblocation,setJoblocation] = useRecoilState(joblocationAtom);
   const [role,setrole] = useRecoilState(jobRoleAtom);
+  const setAllJobs = useSetRecoilState(AllJobsAtom);
+  // TOdo shift this to Actions folders
+  const FilterJobsBySearch = async(role:string,joblocation?:string)=>{
+      const res = await fetch(`${BACKEND_URL}/api/v1/jobs/searchJob?role=${role}&location=${joblocation}`,{
+        method:"GET",
+        headers:{
+          "Authorization":`Bearer ${localStorage.getItem("token")}`
+        }
+      });
+      const data = await res.json();
+      setAllJobs(data.jobs)
+  }
+
+  const handleSearch = async()=>{
+      await FilterJobsBySearch(role,joblocation);
+  }
   return (
     <div>
           <div className="h-[10rem]">
@@ -22,16 +40,16 @@ const UsersFeed = () => {
               <Input
               placeholder="💼 What position are u looking for?"
               className="p-2 w-[60%]"
-              value={joblocation}
-              onChange={(e)=>setJoblocation(e.target.value)}
+              value={role}
+              onChange={(e)=>setrole(e.target.value)}
               />
               <Input
               placeholder="📍 Location"
               className="p-2 w-[30%]"
-              value={role}
-              onChange={(e)=>setrole(e.target.value)}
+              value={joblocation}
+              onChange={(e)=>setJoblocation(e.target.value)}
               />
-              <Button>Search</Button>
+              <Button onClick={handleSearch}>Search</Button>
           </div><hr />
           <div className="px-10 flex justify-center">
               <JobDisplay/>

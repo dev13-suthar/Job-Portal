@@ -1,6 +1,7 @@
 import { loginProps } from "@/components/LoginForm";
 import { BACKEND_URL } from "@/constants";
 import { NavigateFunction } from "react-router-dom";
+import { toast } from "sonner";
 
 
 
@@ -21,5 +22,6 @@ export const loginUser = async(values:loginProps,navigate:NavigateFunction)=>{
     }else{
          navigate("/home/feed")
     }
-    return data.token
+    toast.success("Logged in")
+    return data.token;
 }
