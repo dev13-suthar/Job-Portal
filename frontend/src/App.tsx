@@ -13,6 +13,7 @@ import SingleJob from './pages/job.id/SingleJob'
 import MyApplications from './pages/MyApplications/MyApplications'
 import MyProfile from './pages/profilePage/MyProfile'
 import MyJobInfo from './pages/MyjobsInfo/MyJobInfo'
+import EditJob from './pages/EditJobs/EditJob'
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
               <Route path='myApplication' element={<MyApplications/>}/>
               <Route path='me' element={<MyProfile isMe={true}/>}/>
               <Route path='user/:id' element={<MyProfile isMe={false}/>}/>
+              <Route path='edit/:id' element={<EditJob/>}/>
               <Route path='myJobinfo/:id' element={<MyJobInfo/>}/>
             </Route>
           </Routes>

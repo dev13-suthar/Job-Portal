@@ -3,6 +3,7 @@ import { authMiddleware } from "../middleware/authMiddleware";
 import Jobs from "../models/Jobs";
 import { empMiddleware } from "../middleware/employeeMiddleware";
 import { Schema } from "mongoose";
+import { editJobSchema } from "../types/jobTypes";
 
 
 const router = Router();
@@ -101,6 +102,42 @@ router.get("/getApplicants/:jobId",authMiddleware,empMiddleware,async(req,res)=>
     } catch (error:any) {
         res.status(400).json({
             error:error.message
+        })
+    }
+})
+
+// Edit job
+router.patch("/editJob/:jobId",authMiddleware,empMiddleware,async(req,res)=>{
+    const userId = req.userId;
+    const {jobId} = req.params;
+    try {
+        const body = req.body;
+        const parseData = editJobSchema.safeParse(body);
+        if(!parseData.success){
+            const errors = parseData.error.errors.map(err => {
+                return {
+                    path: err.path.join('.'),
+                    message: err.message,
+                };
+            });
+        
+            return res.status(400).json({
+                message: "Validation errors occurred",
+                errors: errors,
+            });
+        }
+       const updated =  await Jobs.findByIdAndUpdate(jobId,{
+            title:parseData.data?.title,
+            salary:parseData.data?.salary,
+            description:parseData.data?.description
+        },{new:true});
+        return res.status(200).json({
+            message:"Updated Success",
+            updated
+        })
+    } catch (error:any) {
+        res.status(400).json({
+            error:error.message,
         })
     }
 })
