@@ -1,4 +1,3 @@
-import EditModal from "@/components/EditModal";
 import { BACKEND_URL } from "@/constants";
 import { jobsResponse } from "@/hooks/useGetJobs"
 import { useEffect, useState } from "react"
@@ -7,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 const EmployeeFeed = () => {
     const [jobs, setjobs] = useState<jobsResponse[]>();
     const [loading, setloading] = useState(true);
-    const [showModal, setshowModal] = useState(false);
     useEffect(()=>{
       const getJobs = async()=>{
         const res = await fetch(`${BACKEND_URL}/api/v1/employee/getMyJobs`,{
@@ -29,10 +27,10 @@ const EmployeeFeed = () => {
       <header className='p-5 pt-9'>
           <p className="text-blue-600 text-4xl font-semibold">Jobs you created:-</p>
       </header>
-      <div className={`flex items-center justify-center p-5 ${showModal?'':null}`}>
+      <div className={`flex items-center justify-center p-5`}>
           <div className="w-[70%] flex flex-col gap-3">
               {jobs?.map((job)=>(
-                <MyjobsCard key={job._id} id={job._id} role={job.role} companyLocation={job.companyLocation??"India"} jobType={job.location} salaray={job?.salary??"null"} applications={job.submissions.length.toString()} showModal={showModal} setShowModal={setshowModal}/>
+                <MyjobsCard key={job._id} id={job._id} role={job.role} companyLocation={job.companyLocation??"India"} jobType={job.location} salaray={job?.salary??"null"} applications={job.submissions.length.toString()}/>
               ))}
           </div>
       </div>
@@ -42,9 +40,8 @@ const EmployeeFeed = () => {
 
 export default EmployeeFeed
 
-export const MyjobsCard = ({role,companyLocation,jobType,salaray,applications,id,showModal,setShowModal}:{
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  role:string,companyLocation:string,jobType:string,salaray:string,applications:string,id:string,showModal?:boolean,setShowModal:(t:any)=>void
+export const MyjobsCard = ({role,companyLocation,jobType,salaray,applications,id}:{
+  role:string,companyLocation:string,jobType:string,salaray:string,applications:string,id:string
 })=>{
   const router = useNavigate();
   return(
@@ -66,11 +63,9 @@ export const MyjobsCard = ({role,companyLocation,jobType,salaray,applications,id
         </div>
         <div className="flex items-center justify-end">
         <button className="bg-slate-500 p-2 px-4 rounded-xl" onClick={()=>{
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          setShowModal((t: any)=>!t)
+            router(`/home/edit/${id}`)
         }}>Edit</button>
         </div>
-        {showModal && <EditModal id={id}/>}
     </div>
   )
 }
