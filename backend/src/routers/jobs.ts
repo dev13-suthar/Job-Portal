@@ -142,4 +142,21 @@ router.patch("/editJob/:jobId",authMiddleware,empMiddleware,async(req,res)=>{
     }
 })
 
+// Delete job by ID
+router.delete("/job/:id",authMiddleware,empMiddleware,async(req,res)=>{
+    const userId = req.userId;
+    const {id} = req.params;
+    try {
+        const deletedJob = await Jobs.findByIdAndDelete(id);
+        res.status(200).json({
+            message:"Job Deleted",
+            id:deletedJob?._id
+        })
+    } catch (error:any) {
+        res.status(400).json({
+            error:error.message
+        })
+    }
+})
+
 export default router;

@@ -4,6 +4,7 @@ import { jobsResponse } from '@/hooks/useGetJobs';
 import { Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'
+import { toast } from 'sonner';
  
 export type editProps = {
     title:string,
@@ -39,8 +40,8 @@ const EditJob = () => {
   return (
     <div  className='px-10 pt-8 '>
         <p className='font-semibold text-4xl text-blue-500'>Edit Job</p>
-        <div className='flex items-center justify-center p-3'>
-            <div className='w-[70%] flex justify-center items-center bg-slate-900 rounded-xl border p-4'>
+        <div className='flex items-center justify-center p-3 flex-col'>
+            <div className='w-[70%] flex justify-center items-center bg-slate-900 rounded-xl border p-4 flex-col'>
                 <Formik
                 onSubmit={handleFormSubmit}
                 initialValues={{
@@ -87,6 +88,21 @@ const EditJob = () => {
                         </form>
                     )}
                 </Formik>
+                <button className='w-[full] rounded-xl mt-5 float-right bg-red-400 p-3' onClick={async()=>{
+                                const res = await fetch(`${BACKEND_URL}/api/v1/jobs/job/${id}`,{
+                                    method:"DELETE",
+                                    headers:{
+                                        "Authorization":`Bearer ${localStorage.getItem("token")}`
+                                    }
+                                });
+                                const data = await res.json();
+                                if(!res.ok){
+                                    const err = data.message;
+                                    toast.error(err)
+                                }else{
+                                    toast.success("Job Deleted Successfully!!")
+                                }
+                            }}>Delete</button>
             </div>
         </div>
     </div>
