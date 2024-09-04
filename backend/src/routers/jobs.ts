@@ -2,8 +2,10 @@ import { Router } from "express";
 import { authMiddleware } from "../middleware/authMiddleware";
 import Jobs from "../models/Jobs";
 import { empMiddleware } from "../middleware/employeeMiddleware";
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { editJobSchema } from "../types/jobTypes";
+import User from "../models/user";
+import Company from "../models/company";
 
 
 const router = Router();
@@ -129,7 +131,8 @@ router.patch("/editJob/:jobId",authMiddleware,empMiddleware,async(req,res)=>{
        const updated =  await Jobs.findByIdAndUpdate(jobId,{
             title:parseData.data?.title,
             salary:parseData.data?.salary,
-            description:parseData.data?.description
+            description:parseData.data?.description,
+            role:parseData.data.role
         },{new:true});
         return res.status(200).json({
             message:"Updated Success",
@@ -147,10 +150,43 @@ router.delete("/job/:id",authMiddleware,empMiddleware,async(req,res)=>{
     const userId = req.userId;
     const {id} = req.params;
     try {
-        const deletedJob = await Jobs.findByIdAndDelete(id);
+        const findUser = await User.findById(userId);
+        const company = await Company.findOne({
+            employee:findUser?._id
+        });
+        if(!findUser || !company){
+            throw new Error("Cannot find User or Company")
+        };
+        // Session to main ACID:
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        try {
+            const deleteJob = await Jobs.findByIdAndDelete(id);
+            await Company.findByIdAndUpdate(company._id,
+                {
+                    $pull:{
+                        'jobs':deleteJob?._id
+                    }
+                },
+                {new:true}
+            )
+            await User.findByIdAndUpdate(userId,{
+                $pull:{
+                    'jobs':deleteJob?._id
+                },
+            },{new:true});
+            session.commitTransaction();
+        } catch (error:any) {
+            await session.abortTransaction();
+            res.status(400).json({
+                error:error.message
+            })
+        }finally{
+            session.endSession();
+        }
         res.status(200).json({
-            message:"Job Deleted",
-            id:deletedJob?._id
+            success:true,
+            message:"Job Deleted"
         })
     } catch (error:any) {
         res.status(400).json({
@@ -160,3 +196,5 @@ router.delete("/job/:id",authMiddleware,empMiddleware,async(req,res)=>{
 })
 
 export default router;
+
+//66c81....1f

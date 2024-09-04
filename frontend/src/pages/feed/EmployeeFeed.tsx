@@ -47,7 +47,7 @@ export const MyjobsCard = ({role,companyLocation,jobType,salaray,applications,id
   return(
     <div className="p-3 grid grid-cols-4 w-full h-max bg-slate-900 rounded-xl">
         <div className="text-xl flex flex-col">
-            <p className="font-bold">{role}r</p>
+            <p className="font-bold">{role}</p>
             <div className="flex items-center gap-3 text-gray-600 text-[13px] font-bold cursor-pointer" onClick={()=>{
         router(`/home/myJobinfo/${id}`)
     }}>
