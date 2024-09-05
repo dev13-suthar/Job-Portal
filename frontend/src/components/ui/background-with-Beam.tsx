@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -70,7 +71,7 @@ export const BackgroundBeamsWithCollision = ({
     <div
       ref={parentRef}
       className={cn(
-        "h-96 md:h-[40rem] bg-slate-950 relative flex justify-center overflow-hidden",
+        "h-full md:h-[full] bg-slate-950 relative flex justify-center overflow-hidden",
         // h-screen if you want bigger
         className
       )}

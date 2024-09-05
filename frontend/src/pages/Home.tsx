@@ -1,5 +1,7 @@
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-with-Beam"
 import { Button } from "@/components/ui/button"
+import { InfiniteMovingCards } from "@/components/ui/ScrollingCard"
+import { testimonials } from "@/constants"
 import { useNavigate } from "react-router-dom"
 
 const Home = () => {
@@ -18,10 +20,17 @@ const Home = () => {
                   </p>
                 </header>
                 <div className="mt-24 flex justify-center items-center w-full gap-3">
-                  
+                <InfiniteMovingCards
+                  items={testimonials}
+                  direction="left"
+                  speed="fast"
+                />
                 </div>
             </div>
         </BackgroundBeamsWithCollision>
+        <div className="p-6 w-full h-30 bg-slate-900 flex justify-between items-center">
+            <h1>FOOTER</h1>
+        </div>
     </div>
   )
 }
