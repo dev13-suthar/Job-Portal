@@ -12,8 +12,15 @@ const router = Router();
 
 // Get all jobs
 router.get("/all",authMiddleware,async(req,res)=>{
+    const {sort} = req.query;
     try {
-        const jobs = await Jobs.find({}).sort({ createdAt: -1 });
+        const sortValue = sort==="asc"?1:-1;
+        let jobs;
+        if(sort){
+            jobs = await Jobs.find({}).sort({ createdAt: sortValue});
+            return res.json({jobs})   
+        }
+         jobs = await Jobs.find({}).sort({ createdAt: -1 });
         res.json({jobs})
     } catch (error:any) {
         res.status(404).json({
