@@ -1,20 +1,25 @@
 import { jobsResponse } from '@/hooks/useGetJobs'
 import { Button } from './ui/button';
 import JobCardSkeleton from './ui/JobCardSkeleton';
-import { useRecoilValueLoadable } from 'recoil';
+import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { AllJobsAtom } from '@/state/Alljobs';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback } from './ui/avatar';
+import { sortAtom } from '@/state/sortAtom';
 
 
 const Jobs = () => {
   // const {allJobs,isLoading} = useGetJobs(role,joblocation);
   const allJobs = useRecoilValueLoadable(AllJobsAtom);
+  const setSortatom = useSetRecoilState(sortAtom);
   return (
     <div className='p-2 w-[70%] border'>
         <div className='flex justify-between items-center pb-2 px-6'>
             <p className='text-3xl'>{allJobs.contents.length} Jobs</p>
-            <Button className='rounded-[22px]'>Sort by</Button>
+           <div className='flex items-center gap-2'>
+           <Button className='rounded-[22px]' onClick={()=>{setSortatom("desc")}}>Newest JOBS</Button>
+           <Button className='rounded-[22px]' onClick={()=>{setSortatom("asc")}}>OLDEST JOBS</Button>
+           </div>
         </div><hr />
         <div className='flex flex-col px-14 gap-3 mt-8'>
              {allJobs.state=="loading"?(
