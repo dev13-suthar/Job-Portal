@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import { Button } from './ui/button'
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { AllJobsAtom } from '@/state/Alljobs';
 import { BACKEND_URL } from '@/constants';
 import { getAllJobs } from '@/actions/jobs.action';
+import { sortAtom } from '@/state/sortAtom';
 
 const FiltersSideBar = () => {
   const [locationType, setlocationType] = useState("");
   const [isFilterApplied, setisFilterApplied] = useState(false);
+  const sortatom = useRecoilValue(sortAtom);
   const setAllJobs = useSetRecoilState(AllJobsAtom)
   const handleClick = async()=>{
-      const res = await fetch(`${BACKEND_URL}/api/v1/jobs/jobfilters?locationtype=${locationType}`,{
+      const res = await fetch(`${BACKEND_URL}/api/v1/jobs/jobfilters?locationtype=${locationType??"India"}&sort=${sortatom}`,{
         method:"GET",
         headers:{
           "Authorization":`Bearer ${localStorage.getItem("token")}`

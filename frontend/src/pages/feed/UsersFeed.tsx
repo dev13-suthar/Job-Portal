@@ -5,15 +5,18 @@ import { Spotlight } from "@/components/ui/Spotlight"
 import { BACKEND_URL } from "@/constants"
 import { AllJobsAtom } from "@/state/Alljobs"
 import { joblocationAtom, jobRoleAtom } from "@/state/queryAtoms"
-import { useRecoilState, useSetRecoilState } from "recoil"
+import { sortAtom } from "@/state/sortAtom"
+import { useEffect } from "react"
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 
 const UsersFeed = () => {
   const [joblocation,setJoblocation] = useRecoilState(joblocationAtom);
   const [role,setrole] = useRecoilState(jobRoleAtom);
   const setAllJobs = useSetRecoilState(AllJobsAtom);
+  const sortatom = useRecoilValue(sortAtom)
   // TOdo shift this to Actions folders
-  const FilterJobsBySearch = async(role:string,joblocation?:string)=>{
-      const res = await fetch(`${BACKEND_URL}/api/v1/jobs/searchJob?role=${role}&location=${joblocation}`,{
+  const FilterJobsBySearch = async(role:string,joblocation?:string,sortatommm?:string)=>{
+      const res = await fetch(`${BACKEND_URL}/api/v1/jobs/multiJob?role=${role}&location=${joblocation}&sort=${sortatommm}`,{
         method:"GET",
         headers:{
           "Authorization":`Bearer ${localStorage.getItem("token")}`
@@ -24,8 +27,11 @@ const UsersFeed = () => {
   }
 
   const handleSearch = async()=>{
-      await FilterJobsBySearch(role,joblocation);
+      await FilterJobsBySearch(role,joblocation,sortatom);
   }
+  useEffect(() => {
+    FilterJobsBySearch(role, joblocation, sortatom);
+  }, [sortatom]); //
   return (
     <div>
           <div className="h-[10rem]">
