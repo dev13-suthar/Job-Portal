@@ -80,10 +80,12 @@ router.get("/searchJob",authMiddleware,async(req,res)=>{
 
 router.get("/jobfilters",authMiddleware,async(req,res)=>{
     try {
+        const {sort} = req.query;
         const locationType = req.query.locationtype;
+        const sortValue = sort==="asc"?1:-1;
         const jobs = await Jobs.find({
             location:locationType  
-        });
+        }).sort({ createdAt: sortValue});
         if(!jobs){
             throw new Error("No Matching Results")
         }
@@ -199,6 +201,26 @@ router.delete("/job/:id",authMiddleware,empMiddleware,async(req,res)=>{
         res.status(400).json({
             error:error.message
         })
+    }
+})
+
+// Demoo
+
+router.get("/multiJob",authMiddleware,async(req,res)=>{
+    try {
+        const { location, role, sort } = req.query;
+        let filter:any = {};
+        if(location){
+            filter.companyLocation = { $regex: location, $options: "i" }
+        }
+        if(role){
+            filter.role = {$regex: role, $options: "i"}
+        }
+        const sortValue = sort==="asc"?1:-1;
+        const jobs = await Jobs.find(filter).sort({ createdAt: sortValue });
+        res.status(200).json({jobs});
+    } catch (error:any) {
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 })
 

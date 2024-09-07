@@ -7,7 +7,8 @@ export const AllJobsSelector = selector({
   get: async ({get}) => {
     const sortValue = get(sortAtom)
     await new Promise(resolve=>setTimeout(resolve,2000))
-    const res = await fetch(`${BACKEND_URL}/api/v1/jobs/all?sort=${sortValue}`, {
+    // http://localhost:7002/api/v1/jobs/multiJob?location=india
+    const res = await fetch(`${BACKEND_URL}/api/v1/jobs/multiJob?sort=${sortValue}`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
