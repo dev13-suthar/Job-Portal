@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button } from './ui/button'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { AllJobsAtom } from '@/state/Alljobs';
 import { BACKEND_URL } from '@/constants';
 import { getAllJobs } from '@/actions/jobs.action';
@@ -12,7 +12,8 @@ const FiltersSideBar = () => {
   const sortatom = useRecoilValue(sortAtom);
   const setAllJobs = useSetRecoilState(AllJobsAtom)
   const handleClick = async()=>{
-      const res = await fetch(`${BACKEND_URL}/api/v1/jobs/jobfilters?locationtype=${locationType??"India"}&sort=${sortatom}`,{
+    // http://localhost:7002/api/v1/jobs/multiJob?locationType=Hybrid 
+      const res = await fetch(`${BACKEND_URL}/api/v1/jobs/multiJob?locationType=${locationType}&sort=${sortatom}`,{
         method:"GET",
         headers:{
           "Authorization":`Bearer ${localStorage.getItem("token")}`
