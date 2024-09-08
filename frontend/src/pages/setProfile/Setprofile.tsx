@@ -6,8 +6,6 @@ import { useRecoilValue } from "recoil"
 
 const Setprofile = () => {
     const userRole = useRecoilValue(decodedUserRoleState);
-    console.log(userRole);
-
   return (
     userRole==="Employee"?(
         <CreateCompanyForm/>

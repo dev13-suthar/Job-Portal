@@ -12,7 +12,8 @@ export type jobsResponse = {
     submissions: [],
     __v: string | number,
     salary?:string,
-    companyLocation?:string
+    companyLocation?:string,
+    logo:string
 }
 
 const useGetJobs = (role:string,joblocation:string) => {

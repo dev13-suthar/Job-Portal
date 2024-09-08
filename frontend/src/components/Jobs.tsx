@@ -3,7 +3,7 @@ import JobCardSkeleton from './ui/JobCardSkeleton';
 import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { AllJobsAtom } from '@/state/Alljobs';
 import { useNavigate } from 'react-router-dom';
-import { Avatar, AvatarFallback } from './ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { sortAtom } from '@/state/sortAtom';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
@@ -37,7 +37,7 @@ const Jobs = () => {
              ):(
               <>
               {allJobs.contents.map((job:jobsResponse)=>(
-              <JobCard _id={job._id} key={job._id} company={job.company} companyLocation={job.companyLocation??"India"} role={job.role} desc={job.description} salary={job.salary ?? ""} location={job.location}/>
+              <JobCard _id={job._id} key={job._id} logo={job.logo??"https://cdn.pixabay.com/photo/2024/02/17/00/18/cat-8578562_1280.jpg"} company={job.company} companyLocation={job.companyLocation??"India"} role={job.role} desc={job.description} salary={job.salary ?? ""} location={job.location}/>
             ))}
             </>
              )}
@@ -48,7 +48,7 @@ const Jobs = () => {
 
 export default Jobs
 
-const JobCard = ({company,location,role,salary,desc,companyLocation,_id}:{
+const JobCard = ({company,location,role,salary,desc,companyLocation,_id,logo}:{
   company:string
   location:string,
   role:string,
@@ -56,6 +56,7 @@ const JobCard = ({company,location,role,salary,desc,companyLocation,_id}:{
   desc:string,
   companyLocation:string,
   _id:string
+  logo:string
 })=>{
   const navigate = useNavigate();
   const companyFullName = company.split(" ");
@@ -67,7 +68,8 @@ const JobCard = ({company,location,role,salary,desc,companyLocation,_id}:{
       }}>
                   <div className='w-[25%] flex justify-center items-start'>
                         <Avatar className='size-28'>
-                            <AvatarFallback>{CompanyAvatar}</AvatarFallback>
+                        <AvatarImage src={logo} />
+                        <AvatarFallback>{CompanyAvatar}</AvatarFallback>
                         </Avatar>  
                   </div>
                   <div className='flex flex-col w-[75%] p-1 gap-1'>

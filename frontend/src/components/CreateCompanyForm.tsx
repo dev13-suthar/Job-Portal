@@ -2,17 +2,20 @@ import { Formik, FormikHelpers } from "formik"
 import { Input } from "./ui/input"
 import { Textarea } from "./ui/textarea"
 import { Button } from "./ui/button"
-import { useNavigate } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
 import { BACKEND_URL } from "@/constants"
+import { useRecoilValue } from "recoil"
+import { companyLogo } from "@/state/ProfilePicAtom"
+import UploadLogo from "./UploadLogo"
 
 type companyProps = {
   name:string,
-  description:string
+  description:string,
 }
 
 
 const CreateCompanyForm = () => {
-  const navigate = useNavigate();
+  const companyLogoURL = useRecoilValue(companyLogo);
   const createCompany = async(values:companyProps)=>{
       const res = await fetch(`${BACKEND_URL}/api/v1/createCompany`,{
         method:"POST",
@@ -27,11 +30,13 @@ const CreateCompanyForm = () => {
   }
 
   const handleFormSubmit = async(values:companyProps,helpers:FormikHelpers<companyProps>)=>{
-    await createCompany(values);
+    const additonlaValues = {...values,profilePic:companyLogoURL}
+    await createCompany(additonlaValues);
     helpers.resetForm();
   }
   return (
     <div className='p-5 py-10 flex justify-center'>
+        <UploadLogo/>
         <div className='p-6 rounded-3xl border-slate-2000 bg-slate-900 w-[70%] h-full'>
             <header className='text-2xl font-semibold'>Create Company </header>
             <div className="mt-10 flex justify-center items-center flex-col gap-3">

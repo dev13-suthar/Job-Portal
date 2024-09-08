@@ -205,7 +205,6 @@ router.delete("/job/:id",authMiddleware,empMiddleware,async(req,res)=>{
 })
 
 // Demoo
-
 router.get("/multiJob",authMiddleware,async(req,res)=>{
     try {
         const { location, role, sort,locationType} = req.query;
