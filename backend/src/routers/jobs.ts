@@ -208,7 +208,7 @@ router.delete("/job/:id",authMiddleware,empMiddleware,async(req,res)=>{
 
 router.get("/multiJob",authMiddleware,async(req,res)=>{
     try {
-        const { location, role, sort } = req.query;
+        const { location, role, sort,locationType} = req.query;
         let filter:any = {};
         if(location){
             filter.companyLocation = { $regex: location, $options: "i" }
@@ -216,6 +216,10 @@ router.get("/multiJob",authMiddleware,async(req,res)=>{
         if(role){
             filter.role = {$regex: role, $options: "i"}
         }
+        if(locationType){
+            filter.location = locationType
+        }
+        console.log(filter)
         const sortValue = sort==="asc"?1:-1;
         const jobs = await Jobs.find(filter).sort({ createdAt: sortValue });
         res.status(200).json({jobs});
