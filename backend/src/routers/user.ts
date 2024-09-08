@@ -114,7 +114,7 @@ router.post("/createCompany",authMiddleware,empMiddleware,async(req,res)=>{
    const newCompany = new Company({
         name:parsedData.data.name,
         description:parsedData.data.description,
-        profilePic:parsedData.data.profilePic || 'http://xyz/com',
+        profilePic:parsedData.data.profilePic || 'https://cdn.pixabay.com/photo/2024/02/17/00/18/cat-8578562_1280.jpg',
         employee:userId
    });
    await newCompany.save();
@@ -157,7 +157,8 @@ router.post("/newJob",authMiddleware,empMiddleware,async(req,res)=>{
                 company:searchCompany?.name,
                 createdBy:userId,
                 salary:parsedData.data?.salary,
-                companyLocation:parsedData.data.companyLocation
+                companyLocation:parsedData.data.companyLocation,
+                logo:searchCompany?.profilePic ?? "'https://cdn.pixabay.com/photo/2024/02/17/00/18/cat-8578562_1280.jpg'"
             });
             await newJob.save();
             await Company.findByIdAndUpdate(searchCompany?.id,

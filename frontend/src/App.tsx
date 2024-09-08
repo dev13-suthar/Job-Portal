@@ -15,6 +15,7 @@ import MyProfile from './pages/profilePage/MyProfile'
 import MyJobInfo from './pages/MyjobsInfo/MyJobInfo'
 import EditJob from './pages/EditJobs/EditJob'
 
+
 function App() {
 
   return (

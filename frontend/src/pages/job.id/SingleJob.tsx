@@ -23,7 +23,9 @@ const SingleJob = () => {
         <div className="p-2 bg-slate-900 rounded-xl h-full  w-[60%] px-4">
             <header className="flex items-start gap-1 flex-col justify-star pb-6">
                 <div className="flex items-center gap-3">
-                <div className="bg-red-300 size-10 rounded-full"/>
+                <div className="size-10 rounded-full">
+                    <img src={job.contents.logo} className="size-10 rounded-full" alt="" />
+                </div>
                 <p className="font-semibold">{job.contents.company}</p>
                 </div>
                 {/* Title */}

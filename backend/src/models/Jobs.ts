@@ -23,6 +23,10 @@ const jobSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    logo:{
+        type:String,
+        required:false
+    },
     salary:{
         type:String,
         required:true
