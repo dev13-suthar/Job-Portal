@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authMiddleware } from "../middleware/authMiddleware";
 import Jobs from "../models/Jobs";
 import { empMiddleware } from "../middleware/employeeMiddleware";
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 import { editJobSchema } from "../types/jobTypes";
 import User from "../models/user";
 import Company from "../models/company";
@@ -10,22 +10,26 @@ import Company from "../models/company";
 
 const router = Router();
 
-// Get all jobs
-router.get("/all",authMiddleware,async(req,res)=>{
-    const {sort} = req.query;
+// Get all jobs with filters
+router.get("/multiJob",authMiddleware,async(req,res)=>{
     try {
-        const sortValue = sort==="asc"?1:-1;
-        let jobs;
-        if(sort){
-            jobs = await Jobs.find({}).sort({ createdAt: sortValue});
-            return res.json({jobs})   
+        const { location, role, sort,locationType} = req.query;
+        let filter:any = {};
+        if(location){
+            filter.companyLocation = { $regex: location, $options: "i" }
         }
-         jobs = await Jobs.find({}).sort({ createdAt: -1 });
-        res.json({jobs})
+        if(role){
+            filter.role = {$regex: role, $options: "i"}
+        }
+        if(locationType){
+            filter.location = locationType
+        }
+        console.log(filter)
+        const sortValue = sort==="asc"?1:-1;
+        const jobs = await Jobs.find(filter).sort({ createdAt: sortValue });
+        res.status(200).json({jobs});
     } catch (error:any) {
-        res.status(404).json({
-            error:error.message
-        })
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 })
 
@@ -74,25 +78,6 @@ router.get("/searchJob",authMiddleware,async(req,res)=>{
     }catch(err){
         res.status(400).json({
             error:err
-        })
-    }
-})
-
-router.get("/jobfilters",authMiddleware,async(req,res)=>{
-    try {
-        const {sort} = req.query;
-        const locationType = req.query.locationtype;
-        const sortValue = sort==="asc"?1:-1;
-        const jobs = await Jobs.find({
-            location:locationType  
-        }).sort({ createdAt: sortValue});
-        if(!jobs){
-            throw new Error("No Matching Results")
-        }
-        res.json({jobs})
-    } catch (error:any) {
-        res.status(400).json({
-            error:error.message
         })
     }
 })
@@ -204,28 +189,7 @@ router.delete("/job/:id",authMiddleware,empMiddleware,async(req,res)=>{
     }
 })
 
-// Demoo
-router.get("/multiJob",authMiddleware,async(req,res)=>{
-    try {
-        const { location, role, sort,locationType} = req.query;
-        let filter:any = {};
-        if(location){
-            filter.companyLocation = { $regex: location, $options: "i" }
-        }
-        if(role){
-            filter.role = {$regex: role, $options: "i"}
-        }
-        if(locationType){
-            filter.location = locationType
-        }
-        console.log(filter)
-        const sortValue = sort==="asc"?1:-1;
-        const jobs = await Jobs.find(filter).sort({ createdAt: sortValue });
-        res.status(200).json({jobs});
-    } catch (error:any) {
-        res.status(500).json({ message: "Server error", error: error.message });
-    }
-})
+
 
 export default router;
 
