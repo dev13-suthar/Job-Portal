@@ -22,4 +22,5 @@ export const profileSchema = z.object({
         companyName:z.string()
     }).optional(),
     profession:z.string().optional(),
+    githubUserName:z.string().optional(),
 })

@@ -24,7 +24,6 @@ router.get("/multiJob",authMiddleware,async(req,res)=>{
         if(locationType){
             filter.location = locationType
         }
-        console.log(filter)
         const sortValue = sort==="asc"?1:-1;
         const jobs = await Jobs.find(filter).sort({ createdAt: sortValue });
         res.status(200).json({jobs});
