@@ -4,11 +4,14 @@ import { User } from "@/lib/types"
 import { AvatarFallback } from "@radix-ui/react-avatar"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import GIthubProfileCard from "./GIthubProfileCard"
+
 
 const MyProfile = ({isMe}:{isMe:boolean}) => {
     const [user, setuser] = useState<User>();
     const [loading, setloading] = useState(true);
     const {id} = useParams();
+    const gitHubUserName = user?.githubUserName;
     useEffect(()=>{
         const data = async()=>{
             const res = await fetch(`${BACKEND_URL}/api/v1/${isMe?`me`:`user/${id}`}`,{
@@ -77,11 +80,19 @@ const MyProfile = ({isMe}:{isMe:boolean}) => {
                         </div>
                     </div>
                 </div>
-                <p className="text-2xl font-semibold">More Here</p>
+                <div className="p-2  px-12 flex items-center justify-between h-max border">
+                        {!gitHubUserName?(
+                            <div className="p-10 w-[210px] h-[100px] bg-slate-900 rounded-xl flex justify-center items-center">
+                                No Github Data Found :(
+                            </div>
+                        ):(
+                            <GIthubProfileCard username={gitHubUserName ?? ""}/>
+                        )}
+                </div>
             </div>
         </div>
     </div>
   )
 }
 
-export default MyProfile
+export default MyProfile    

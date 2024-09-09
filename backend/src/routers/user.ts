@@ -86,7 +86,8 @@ router.post("/profileSummary",authMiddleware,async(req,res)=>{
                     'profile.pastExperience': parsedData.data.pastExperience 
                 },
             isProfileCompleted:true,
-            profession:parsedData.data.profession
+            profession:parsedData.data.profession,
+            githubUserName:parsedData.data.githubUserName,
             },
             {new:true}
         );

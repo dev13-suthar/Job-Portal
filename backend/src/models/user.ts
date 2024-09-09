@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    githubUserName:{
+        type:String,
+        required:false
+    },
     role: {
         type: String,
         enum: ['User', 'Employee'],

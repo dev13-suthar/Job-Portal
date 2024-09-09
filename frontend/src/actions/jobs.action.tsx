@@ -4,7 +4,7 @@ import { editProps } from "@/pages/EditJobs/EditJob";
 import { toast } from "sonner";
 
 export const getAllJobs = async()=>{
-    const res = await fetch(`${BACKEND_URL}/api/v1/jobs/all`, {
+    const res = await fetch(`${BACKEND_URL}/api/v1/jobs/multiJob`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`,

@@ -27,4 +27,5 @@ export interface User {
     profession?: string;
     profile?: Profile;
     updatedAt?: string;
+    githubUserName?:string
 }

@@ -12,7 +12,6 @@ const FiltersSideBar = () => {
   const sortatom = useRecoilValue(sortAtom);
   const setAllJobs = useSetRecoilState(AllJobsAtom)
   const handleClick = async()=>{
-    // http://localhost:7002/api/v1/jobs/multiJob?locationType=Hybrid 
       const res = await fetch(`${BACKEND_URL}/api/v1/jobs/multiJob?locationType=${locationType}&sort=${sortatom}`,{
         method:"GET",
         headers:{

@@ -13,7 +13,8 @@ type formProps = {
       role:string,
       companyName:string
     },
-    profession:string
+    profession:string,
+    githubUserName:string
 };
 
 
@@ -32,7 +33,7 @@ const UserProfileForm = () => {
     if(!res.ok){
       alert("SOmething wrong")
     }else{
-      navigate("/feed")
+      navigate("home/feed")
     }
     
   }
@@ -56,8 +57,9 @@ const UserProfileForm = () => {
                     startDate:"",
                     endDate:"",
                     role:"",
-                    companyName:""
-                  }
+                    companyName:"",
+                  },
+                   githubUserName:""
                 }}
                 onSubmit={handleFomrSUbmit}
                 >
@@ -78,6 +80,15 @@ const UserProfileForm = () => {
                           value={values.profession}
                           onChange={handleChange}
                           />{errors.profession && touched.profession && errors.profession}
+                      </div>
+                      <div className="flex flex-col justify-start items-start w-full">
+                          <label>GitHub UserName:</label>
+                          <Input
+                          placeholder="GIthub UserName"
+                          name="githubUserName"
+                          value={values.githubUserName}
+                          onChange={handleChange}
+                          />{errors.githubUserName && touched.githubUserName && errors.githubUserName}
                       </div>
                       <Textarea
                       placeholder="Profile Summary"
