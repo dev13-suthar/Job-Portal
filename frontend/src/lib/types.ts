@@ -28,4 +28,5 @@ export interface User {
     profile?: Profile;
     updatedAt?: string;
     githubUserName?:string
+    profilePic?:string
 }

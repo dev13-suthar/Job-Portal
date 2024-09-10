@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { profileSchema, signinSchema, signupSchema } from "../types/userType";
+import { addProfilePicSchema, profileSchema, signinSchema, signupSchema } from "../types/userType";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import User from "../models/user";
@@ -128,6 +128,31 @@ router.post("/createCompany",authMiddleware,empMiddleware,async(req,res)=>{
             error:error.message
         })
     }
+})
+
+// Edit Profile PIC;
+router.post("/add/profilePic",authMiddleware,async(req,res)=>{
+   try {
+    const body = req.body;
+    const userId = req.userId;
+      const parsedData = addProfilePicSchema.safeParse(body);
+      if(!parsedData.success){
+        throw new Error("Incorrect Inputs need valid URL")
+      }
+      const findUser = await User.findByIdAndUpdate(userId,{
+        profilePic:parsedData.data.url
+      },{new:true});
+      if(!findUser){
+        throw new Error("Cannot find user with this ID")
+      };
+      res.status(200).json({
+        message:"Profile Pic Added!"
+      })
+   } catch (error:any) {
+      res.status(400).json({
+        error:error.message
+      })
+   }
 })
 
 // Create JObs;
