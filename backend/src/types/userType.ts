@@ -24,3 +24,7 @@ export const profileSchema = z.object({
     profession:z.string().optional(),
     githubUserName:z.string().optional(),
 })
+
+export const addProfilePicSchema = z.object({
+    url:z.string()
+})

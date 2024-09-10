@@ -6,10 +6,6 @@ const profileSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    profilePic: {
-        type: String,
-        required: false
-    },
     pastExperience: {
         type: [],  // Define the type of elements in the array
         required: false,
@@ -25,6 +21,10 @@ const userSchema = new mongoose.Schema({
     profession:{
         type:String,
         required:false
+    },
+    profilePic: {
+        type: String,
+        required: false
     },
     email: {
         type: String,

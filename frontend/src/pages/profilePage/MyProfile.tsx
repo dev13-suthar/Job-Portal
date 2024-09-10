@@ -5,6 +5,7 @@ import { AvatarFallback } from "@radix-ui/react-avatar"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import GIthubProfileCard from "./GIthubProfileCard"
+import EditProfilePic from "./EditProfilePic"
 
 
 const MyProfile = ({isMe}:{isMe:boolean}) => {
@@ -37,12 +38,29 @@ const MyProfile = ({isMe}:{isMe:boolean}) => {
             <div className="w-[60%] p-3 border-2 h-full flex flex-col">
                 {/* Headerr */}
                 <section className="flex  w-full h-max">
-                    <div className="w-[40%] h-[250px]  flex justify-center items-center">
+                    {isMe?(
+                        <EditProfilePic user={user}/>
+                    ):user?.profilePic?(
+                        <Avatar className="size-36">
+                            <AvatarImage src={user.profilePic}/>
+                            <AvatarFallback>FK</AvatarFallback>
+                        </Avatar>
+                    ):(
+                        <Avatar className="size-36">
+                            <AvatarImage src="https://github.com/shadcn.png"/>
+                            <AvatarFallback>FK</AvatarFallback>
+                        </Avatar>
+                    )}
+                    {/* {user?.profilePic ? (
+                        <EditProfilePic user={user}/>
+                    ):(
+                        <div className="w-[40%] h-[250px]  flex justify-center items-center">
                         <Avatar className="size-36">
                             <AvatarImage src="https://github.com/shadcn.png"/>
                             <AvatarFallback>FK</AvatarFallback>
                         </Avatar>
                     </div>
+                    )} */}
                     <div className="w-[60%] h-[max]  p-2 flex flex-col gap-2">
                         {/* Name */}
                         <p className="text-2xl font-semibold text-blue-600">Basic Info</p><hr />
