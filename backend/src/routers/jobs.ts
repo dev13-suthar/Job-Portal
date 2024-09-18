@@ -13,7 +13,7 @@ const router = Router();
 // Get all jobs with filters
 router.get("/multiJob",authMiddleware,async(req,res)=>{
     try {
-        const { location, role, sort,locationType} = req.query;
+        const { location, role, sort,locationType,salary} = req.query;
         let filter:any = {};
         if(location){
             filter.companyLocation = { $regex: location, $options: "i" }
@@ -23,6 +23,9 @@ router.get("/multiJob",authMiddleware,async(req,res)=>{
         }
         if(locationType){
             filter.location = locationType
+        }
+        if(salary){
+            filter.salary = {$gt:salary}
         }
         const sortValue = sort==="asc"?1:-1;
         const jobs = await Jobs.find(filter).sort({ createdAt: sortValue });
